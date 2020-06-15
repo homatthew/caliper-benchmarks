@@ -20,15 +20,15 @@ mutual-tls: false
 caliper:
   blockchain: fabric
   command:
-    start: export FABRIC_VERSION=1.4.7;export FABRIC_CA_VERSION=1.4.7;docker-compose -f networks/fabric/docker-compose/2org1peercouchdb_solo_raft/docker-compose-tls.yaml up -d;sleep 10s
-    end: docker-compose -f networks/fabric/docker-compose/2org1peercouchdb_solo_raft/docker-compose-tls.yaml down;(test -z \"$(docker ps -aq)\") || docker rm $(docker ps -aq);(test -z \"$(docker images dev* -q)\") || docker rmi $(docker images dev* -q);rm -rf /tmp/hfc-*
+    start: export FABRIC_VERSION=amd64-latest;export FABRIC_CA_VERSION=1.4.7;docker-compose -f networks/fabric/docker-compose/2org1peergoleveldb_solo_raft/docker-compose-tls.yaml up -d;sleep 10s
+    end: docker-compose -f networks/fabric/docker-compose/2org1peergoleveldb_solo_raft/docker-compose-tls.yaml down;(test -z \"$(docker ps -aq)\") || docker rm $(docker ps -aq);(test -z \"$(docker images dev* -q)\") || docker rmi $(docker images dev* -q);rm -rf /tmp/hfc-*
 
 info:
   Version: 2.0.0
   Size: 2 Orgs with 1 Peer
   Orderer: Raft
   Distribution: Single Host
-  StateDB: CouchDB
+  StateDB: GoLevelDB
 
 clients:
   client0.org1.example.com:
@@ -69,23 +69,11 @@ channels:
         eventSource: true
 
     chaincodes:
-    - id: marbles
+    - id: fixed-asset-base
       version: v0
       language: golang
-      path: fabric/samples/marbles/go
-      metadataPath: src/fabric/samples/marbles/go/metadata
-    - id: drm
-      version: v0
-      language: golang
-      path: fabric/scenario/drm/go
-    - id: simple
-      version: v0
-      language: golang
-      path: fabric/scenario/simple/go
-    - id: smallbank
-      version: v0
-      language: golang
-      path: fabric/scenario/smallbank/go
+      path: fabric/api/fixed-asset-base/go
+      metadataPath: src/fabric/api/fixed-asset-base/metadata
 
 organizations:
   Org1:
